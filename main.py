@@ -6,6 +6,17 @@ from datetime import datetime
 app = FastAPI()
 
 # ---------------------------
+# HEALTH CHECK ROUTES (IMPORTANT)
+# ---------------------------
+@app.get("/")
+def home():
+    return {"status": "API is running"}
+
+@app.get("/pipeline")
+def pipeline_check():
+    return {"status": "Pipeline endpoint ready. Use POST."}
+
+# ---------------------------
 # FETCH DATA FROM API
 # ---------------------------
 def fetch_posts():
@@ -23,7 +34,6 @@ def fetch_posts():
 # MOCK AI ENRICHMENT
 # ---------------------------
 def analyze_text(text):
-    # Simple fake AI logic (totally valid for assignment)
 
     if "love" in text.lower():
         sentiment = "enthusiastic"
@@ -74,10 +84,10 @@ def send_notification(email):
     return True
 
 # ---------------------------
-# PIPELINE ENDPOINT
+# PIPELINE ENDPOINT (MAIN LOGIC)
 # ---------------------------
 @app.post("/pipeline")
-def run_pipeline(data=Body(...)):
+def run_pipeline(data = Body(...)):
 
     email = data.get("email")
     source = data.get("source")
